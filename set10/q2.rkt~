@@ -1,0 +1,340 @@
+#lang racket
+(require 2htdp/universe)   
+(require 2htdp/image)
+(require rackunit)
+(require "extras.rkt")
+(require "WidgetWorks.rkt")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; CONSTANTS
+
+(define CANVAS-WIDTH 500)
+(define CANVAS-HEIGHT 600)
+
+(define EMPTY-CANVAS (empty-scene CANVAS-WIDTH CANVAS-HEIGHT))
+
+;; some arbitrary choices
+(define INITIAL-X (/ CANVAS-WIDTH 2))  
+(define INITIAL-Y (/ CANVAS-HEIGHT 2))
+
+(define OFFSET 1)
+
+(define NEW-CUBELET-EVENT "b")
+
+(define INITIAL-MX INITIAL-X)
+(define INITIAL-MY INITIAL-Y)
+(define SIDE 20)
+(define DOUBLE-SIDE 40)
+(define SQUARE-SELECTED (square SIDE "outline" "red"))
+(define SQUARE-UNSELECTED (square SIDE "outline" "green"))
+(define BUTTON-DOWN-EVENT "button-down")
+(define BUTTON-UP-EVENT "button-up")
+(define DRAG-EVENT "drag")
+(define MOVE-EVENT "move")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Data Definitions
+
+;; A SBlock is an object whose class implements the SBlock<%>
+;; interface. 
+
+;; A CubeletFactory is an object whose class implements SWidget<%>.
+;; interface.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;; A CubeletFactory is an object of any class that implements SWidget<%>.
+
+(define CubeletFactory<%>
+  (interface 
+      
+      ;; the (SWidget<%>) says that CubeletFactory<%> inherits from SWidget<%>
+      ;; This means that any class that implements CubeletFactory<%> must
+      ;; implement all the methods from SWidget<%> plus all the methods
+      ;; defined here. 
+      (SWidget<%>)
+    
+    ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; A SBlock is an object of any class that implements SBlock<%>
+
+
+(define SBlock<%> 
+  (interface
+      
+      ;; The interface SBlock<%> inherits from the interface SWidget<%>.
+      ;; This means that any class that implements SBlock<%> must implement
+      ;; all the methods from SWidget<%> plus all the methods defined here.
+      (SWidget<%>)
+    
+    get-team
+
+    add-teammate
+
+    sblock-x
+    sblock-y
+    
+    
+    ))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; cubelets-init : -> Container
+;; GIVEN: no arguments
+;; RETURNS: a Container, initially with no blocks,
+;;          which when run, will run in a 600x500 canvas and
+;;          process the events in the description above.
+(define (cubelets-init)
+  (container-init 
+        CANVAS-WIDTH CANVAS-HEIGHT))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+; run : PosReal -> World
+(define (run rate)
+  (send (cubelets-init) run rate))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; The CubeletFactory% class
+
+;; accepts "b" key events and adds block to the world.
+;; gets the world as an init-field
+
+;; 10-6: in the push model, the ball is a stateful widget
+
+(define CubeletFactory%
+  (class* object% (SWidget<%>)
+    
+    (init-field world)  ; the world to which the factory adds balls
+    (init-field [x INITIAL-X])
+    (init-field [y INITIAL-Y])
+;; the list of registered cubes
+    ;; ListOfCubes
+    (field [cubes empty])
+ 
+
+    (super-new)
+
+
+    ;; EFFECT: registers the given cube
+    ;; RETURNS: the current position in the list of cubes
+    (define/public (register c)
+      (begin
+        (set! cubes (cons c cubes))
+        cubes))
+
+    (define/public (current-list-of-block)
+      cubes)
+
+    
+    
+    (define/public (after-key-event kev)
+      (cond
+        [(key=? kev NEW-CUBELET-EVENT)
+         (send world add-stateful-widget (make-cubelet x y this))]))
+    
+    ;; the Ball Factory has no other behavior
+    
+    (define/public (after-tick) this)
+    (define/public (after-button-down mx my)
+      (begin
+            (set! x mx)
+            (set! y my)))
+    (define/public (after-button-up mx my)
+      (begin
+            (set! x mx)
+            (set! y my)))
+    (define/public (after-drag mx my) this)
+    (define/public (after-move mx my) this)
+    (define/public (add-to-scene s) s)
+    
+    ))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+(define SBlock%
+  (class* object% (SBlock<%>)
+    
+    
+    
+    ;; the init-fields are the values that may vary from one cubelet to
+    ;; the next.
+    
+    ; the x and y position of the center of the cubelet.
+    (init-field x)
+    (init-field y)
+
+    (init-field list-holder)
+    
+    ;; flag is a boolean field, representing true means expanding else compressing.
+    ;; initially true.
+    (init-field [flag true])
+    
+    
+    ; is this selected? Default is false.
+    (init-field [selected? false]) 
+    
+    ;; if the cubelet is selected, the position of
+    ;; the last button-down event inside the cubelet, relative to the
+    ;; cubelet's center.  Else any value.
+    (init-field [saved-mx 0] [saved-my 0])
+
+    (init-field [list-of-blocks-in-world (send list-holder register this)])
+    (init-field [team-mates empty])
+    
+   
+    
+    ; image for displaying the unselected cubelet 
+    (field [cubelet-IMG-UNSELECTED SQUARE-UNSELECTED])
+    ; image for displaying the selected cubelet 
+    (field [cubelet-IMG-SELECTED SQUARE-SELECTED])
+
+
+    
+    (super-new)
+    
+    
+    
+    ;; after-tick : -> Void
+    ;; RETURNS: A cubelet like this one, but as it should be after a tick.
+    (define/public (after-tick)
+      (begin
+        (set! list-of-blocks-in-world (send list-holder current-list-of-block))
+        (set! team-mates (add-block list-of-blocks-in-world))))
+    
+    ;; add-to-scene : Scene -> Scene
+    ;; RETURNS: a scene like the given one, but with this cubelet painted
+    ;;          on it.
+    (define/public (add-to-scene s)
+      (if (equal? selected? true)
+          (place-image
+           cubelet-IMG-SELECTED x y (add-teammate-to-scene s team-mates))
+          (place-image
+           cubelet-IMG-UNSELECTED x y (add-teammate-to-scene s team-mates))))
+    
+    ; after-button-down : Integer Integer -> Void
+    ; GIVEN: the location of a button-down event
+    ; STRATEGY: Cases on whether the event is in the cubelet 
+    (define/public (after-button-down mx my)
+      (if (in-this? mx my)
+          (begin
+            (set! selected? true)
+            (set! saved-mx (- mx x))
+            (set! saved-my (- my y)))
+          this))
+    
+    ;; in-this? : Integer Integer -> Boolean
+    ;; GIVEN: a location on the canvas
+    ;; RETURNS: true iff the location is inside this.
+    (define (in-this? other-x other-y)
+      (<= (+ (sqr (- x other-x)) (sqr (- y other-y)))
+          (sqr SIDE)))
+    
+    ; after-button-up : Integer Integer -> Void
+    ; GIVEN: the location of a button-up event
+    ; STRATEGY: Cases on whether the event is in the cubelet.
+    ; If the cubelet is selected, then unselect it.
+    (define/public (after-button-up mx my)
+      (if (in-this? mx my)
+          (set! selected? false)
+          'error-276))
+    
+    ; after-drag : Integer Integer -> Void
+    ; GIVEN: the location of a drag event
+    ; STRATEGY: Cases on whether the cubelet is selected.
+    ; If it is selected, move it so that the vector from the center to
+    ; the drag event is equal to (mx, my)
+    (define/public (after-drag mx my)
+      (if selected?
+          (begin
+            (set! x (- mx saved-mx))
+            (set! y (- my saved-my)))
+          this))
+    
+    ; after-move : Integer Integer -> Void
+    ; GIVEN: the location of a move event
+    (define/public (after-move mx my)
+      this) 
+    
+    ;; after-key-event : KeyEvent -> Toy
+    ;; RETURNS: A metatoy like this one, but as it should be after the
+    ;; given key event.
+    ;; DETAILS: a cubelet ignores key events
+    (define/public (after-key-event kev)
+      this)
+
+
+    (define/public (sblock-x)
+      x)
+
+    (define/public (sblock-y)
+      y)
+
+    (define/public (get-team)
+      team-mates)
+
+    (define/public (add-teammate b)
+      (cons b team-mates))
+
+    (define (add-block b)
+      (if (overlap? (send (first b) sblock-x) (send (first b) sblock-y))
+          (add-teammate (first b))
+          (add-block (rest b))))
+
+    (define/public (give-list-of-block)
+      list-of-blocks-in-world)
+
+    (define (overlap? x1 y1)
+      (or
+       (<= (abs (- x x1)) DOUBLE-SIDE)
+       (<= (abs (- y y1)) DOUBLE-SIDE)))
+
+      
+          
+
+    (define (add-teammate-to-scene s b)
+      (cond
+        [(empty? b) s]
+        [else (place-image
+           cubelet-IMG-UNSELECTED (send (first b) sblock-x) (send (first b) sblock-y)
+           (add-teammate-to-scene s (rest b)))]))
+    
+    ))
+
+
+(define (make-cubelet x y z)
+  (new SBlock% [x x][y y] [list-holder z]))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define the-world (cubelets-init))
+(define the-factory
+       (new CubeletFactory% [world the-world]))
+
+(define iw (send the-world add-stateful-widget the-factory))
+(define e1 (send the-factory after-key-event "c"))
+
+(define b1 (make-cubelet INITIAL-X INITIAL-Y the-factory))
+(define b2 (make-cubelet INITIAL-X INITIAL-Y the-factory))
+(send b2 give-list-of-block)
+(send the-factory current-list-of-block)
+(define b3 (send b2 after-tick))
+(send b2 get-team)

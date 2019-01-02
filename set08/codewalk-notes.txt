@@ -1,0 +1,23 @@
+TA-1 Name:- Vinay Patil 
+TA-2 Name:- Sujith Narayan
+
+Design Grade for q1:- A
+Design Grade for q2:- AB
+Correctness Score for q1:- 15
+Correctness Score for q2:- 13
+
+TA Comments on Design for q1:-
+1) get-call-tree-of-def has a check for empty of def. This is incorrect.
+2) Design strategy missing for a few functions.
+
+TA Comments on Design for q2:-
+1) get-all-combinations-of-loc should have halting measure
+2) get-complementary-clause is missing halting measure
+
+Student1 CCIS ID:-
+Presentation Grade:- A
+TA Comments on Presentation:-
+
+Student2 CCIS ID:-
+Presentation Grade:- A
+TA Comments on Presentation:-

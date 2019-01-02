@@ -1,0 +1,20 @@
+TA-1 Name:- Abhilash
+TA-2 Name:- Manasa
+
+Design Grade for q1:-  AB
+Correctness Score for q1:- 11/15
+1. x controller changes when postition is changed
+2. Bugs in drags
+3. Velocity is increasing by 1 for y and 5 for x - Should have been reverse
+
+TA Comments on Design for q1:-
+1. Missing function design recipe for all the functions - Only contract provided
+2. Define constants instead of hardcoding
+
+Student1 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+
+Student2 CCIS ID:- rshah7414
+Presentation Grade:- A
+TA Comments on Presentation:-

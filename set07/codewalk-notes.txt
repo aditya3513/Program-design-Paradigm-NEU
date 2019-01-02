@@ -1,0 +1,33 @@
+TA-1 Name:- Shailesh Pujari
+TA-2 Name:- Ramasubramanian Chandrasekar
+
+Design Grade for q1:- AB
+Design Grade for q2:- A
+Correctness Score for q1:- 8/15
+Correctness Score for q2:- 15/15
+
+TA Comments on Design for q1:-
+- Missing template for ListOfVariable
+- Missing template for Exp
+- make-exp: Explicility mention how each recursive call is different preferably using context arguments
+  in the purpose statement based on your design
+
+Suggestions:-
+- Include halting measure on make-exp to indicate when it would halt
+
+TA Comments on Design for q2:-
+- Data defintions look good
+- Missing strategy for probe-possible-outcome?
+
+Student1 CCIS ID:- tongbozhi
+Presentation Grade:- A
+TA Comments on Presentation:-
+- Able to explain how the header is formattted and the decision to put a comma
+- Could explain data defintions for probe
+
+Student2 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+- Able to explain the data defintions and design choices
+- Could explain how formatting works on appexp
+- Could explain how move-forward works on the probe

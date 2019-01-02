@@ -1,0 +1,23 @@
+TA-1 Name:- Shailesh
+TA-2 Name:- Amit N
+
+Design Grade for q1:- A
+Design Grade for q2:- A
+Correctness Score for q1:- 12 (-3 for manual run)
+Correctness Score for q2:- 13
+
+TA Comments on Design for q1:-
+- for Void returning functions, Effect is missing.
+
+TA Comments on Design for q2:-
+- test error messages are missing
+- when implementing an interface, there should not be any extra public methods exposed.
+
+Student1 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+
+Student2 CCIS ID:- rshah7414
+Presentation Grade:- A
+TA Comments on Presentation:-
+- not able to explain how events are passed to toys

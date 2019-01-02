@@ -1,0 +1,121 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname Untitled) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require rackunit)
+
+(require rackunit)
+(require "extras.rkt")
+(check-location "02" "fsm.rkt")
+
+
+
+;; DATA DEFINITION:
+
+;; a State is one of the following Strings
+;; -- "S0"
+;; -- "S1"
+;; -- "S2"
+;; -- "S3"
+;; -- "S4"
+;; INTERPRETATION: refer to table below:
+#|
+State        Input    Output-State
+-----------------------------------
+"S0"        "q" or "x"     "S1"
+"S0"           "u"         "S2"
+"S0"        "a" or "b"     "S3"
+"S0"              "d"      "S4"
+
+"S1"        "q" or "x"     "S1"
+"S1"           "u"         "S2"
+"S1"        "a" or "b"     "S3"
+"S1"           "d"         "S4"
+
+"S2"           "u"         "S2"
+"S2"        "a" or "b"     "S3"
+"S2"           "d"         "S4"
+
+"S3"        "a" or "b"     "S3"
+"S3"           "d"         "S4"
+
+"S4"        "e" or "f"     "S4"
+-----------------------------
+|#
+
+;; a MachineInput is one of the Strings
+;; -- "q"
+;; -- "x" 
+;; -- "u"
+;; -- "a"
+;; -- "b" 
+;; -- "d"
+;; -- "e"
+;; -- "f" 
+
+;; TEMPLATE
+;; state-fn : State -> ??
+#|
+(define (state-fn state machineinput)
+ (cond
+   [(string=? state machineinput)  ...]))  
+|#
+
+;; initial-state : Number -> State
+;; GIVEN: a number
+;; RETURNS: a representation of the initial state
+;; of your machine.  The given number is ignored.
+;; EXAMPLES:
+#| (next-state 1) = "INTERPRETATION: refer to table below:
+
+State        Input    Output-State
+-----------------------------------
+S0           q or x       S1
+S0              u         S2
+S0           a or b       S3
+S0              d         S4
+
+S0 is the initial state of the finite state machine."
+|#
+
+;; STRATEGY: Use template for State on state
+
+(define (next-state n)
+ (if (number? n) "INTERPRETATION: refer to table below:
+
+State        Input    Output-State
+-----------------------------------
+S0           q or x       S1
+S0              u         S2
+S0           a or b       S3
+S0              d         S4
+
+S0 is the initial state of the finite state machine." "not found"
+   )
+  )
+;; TESTS
+
+
+(begin-for-test
+  
+  (check-equal? (next-state 1) "INTERPRETATION: refer to table below:
+
+State        Input    Output-State
+-----------------------------------
+S0           q or x       S1
+S0              u         S2
+S0           a or b       S3
+S0              d         S4
+
+S0 is the initial state of the finite state machine." "Not returning proper output."))
+
+;; next-state : State MachineInput -> State
+;; GIVEN: a state of the machine and a machine input
+;; RETURNS: the state that should follow the given input.
+;; EXAMPLES:
+
+(define (next-state state machineinput)
+  (
+   (cond
+     [
+   ))
+  

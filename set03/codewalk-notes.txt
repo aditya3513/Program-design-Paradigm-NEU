@@ -1,0 +1,22 @@
+TA-1 Name:- Jai Asher
+TA-2 Name:- Ramasubramanian Chandrasekar
+
+Design Grade:- C
+Presentation Grade:- A
+Correctness Score:- 12/15
+
+TA Comments on Design:-
+Functionality:
+- Circles not paused when selected
+- Smooth drag not implemented
+Design:
+- Template for Circ is missing one of the parameters
+- World data definition looks good
+- "Cat" as input in circle-after-drag is incorrect
+- Missing examples for many functions Eg circle-after-drag
+- and-check? : Poor choice of function names
+
+PS: Take care not to upload GRacket files into Github
+
+TA Comments on Presentation:-
+- Could explain all questions on implementation

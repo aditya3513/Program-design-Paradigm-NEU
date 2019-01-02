@@ -1,0 +1,22 @@
+TA-1 Name:- Vinay
+TA-2 Name:- Abhay
+
+Design Grade:- B
+Correctness Score:- 15/15
+TA Comments on Design:- A
+- smooth drag not implemented
+- contract for circ and World are wrong
+- contract for Slip is wrong ( Color is represented as String)
+- Strategy/Examples are missing/incomplete for a functions
+- Halting measure missing for all helper functions
+- avoid if's in cond
+- generalize your code
+
+Student1 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+- Make sure to write all the meta for all the functions (Contract, Purpose, Examples, Strategy, Halting Measure(wherever neccessary))
+
+Student2 CCIS ID:-
+Presentation Grade:-
+TA Comments on Presentation:-

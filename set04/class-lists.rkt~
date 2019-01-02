@@ -1,0 +1,98 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname class-lists) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require rackunit)
+(require "extras.rkt")
+(define-struct slip (color name1 name2))
+(define n1 (make-slip "yellow" "a" "b"))
+(define n2 (make-slip "yellow" "x" "y"))
+(define n3 (make-slip "yellow" "b" "a"))
+(define n4 (make-slip "yellow" "ab" "bz"))
+(define n5 (make-slip "yellow" "abc" "b"))
+(define n6 (make-slip "yellow" "a" "b"))
+(define n7 (make-slip "yellow" "a1" "b1"))
+
+(define n11 (make-slip "yellow" "a" "b"))
+(define n12 (make-slip "yellow" "x" "y"))
+(define n13 (make-slip "yellow" "b" "a"))
+(define n14 (make-slip "blue" "ab" "bz"))
+(define n15 (make-slip "yellow" "abc" "b"))
+(define n16 (make-slip "yellow" "a" "b"))
+(define n17 (make-slip "blue" "a1" "b1"))
+(define n18 (make-slip "blue" "a1" "b1"))
+(define n19 (make-slip "blue" "ab" "b1"))
+
+(define l1 (list n1 n2 n3 n4 n5 n6 n7))
+
+(define (color-yellow? s)
+  (equal? (slip-color s) "yellow"))
+
+(define (color-blue? s)
+  (equal? (slip-color s) "blue"))
+
+(define (color-equal? s1 s2)
+  (equal? (slip-color s1) (slip-color s2)))
+
+(define (rev-name-slip s)
+ (make-slip (slip-color s) (slip-name2 s)
+                     (slip-name1 s)))
+
+(define (slip-exits s l)
+  (or
+   (member s l)
+   (member (rev-name-slip s) l)
+   ))
+
+
+(define (remove-dups l1 l2)
+  (cond
+    [(empty? l1) empty]
+    [else
+     (if (not (slip-exits (first l1) (rest l1)))
+         (append (cons (first l1) l2) (remove-dups (rest l1) l2))
+         (remove-dups (rest l1) l2)
+         )]))
+
+;;(remove-dups (list n1 n2 n3 n3 n4 n4 n5 n6 n7) empty)
+
+(define (felleisen-helper l1 l2)
+  (cond
+    [(empty? l1) empty]
+    [else
+     (if (color-yellow? (first l1))
+         (append (cons (first l1) l2) (felleisen-helper (rest l1) l2))
+         (felleisen-helper (rest l1) l2)
+         )]))
+
+(define (shivers-helper l1 l2)
+  (cond
+    [(empty? l1) empty]
+    [else
+     (if (color-blue? (first l1))
+         (append (cons (first l1) l2) (shivers-helper (rest l1) l2))
+         (shivers-helper (rest l1) l2)
+         )]))
+
+
+
+
+(define (shivers-roster l)
+  (remove-dups (shivers-helper l empty) empty))
+
+(define (felleisen-roster l)
+  (remove-dups (felleisen-helper l empty) empty))
+
+(define lx1 (felleisen-roster (list n11 n12 n13 n14 n15 n16 n17)))
+
+(define lx2 (shivers-roster (list n11 n12 n13 n14 n15 n16 n17 n18 n19)))
+;;----------------------------------------
+(define lx3 (list n1 n2 n4 n5))
+
+(define (possible-roster? l)
+  (or
+   (equal? (shivers-roster l) l)
+   (equal? (felleisen-roster l) l)))
+
+
+
+(possible-roster? (list n11 n12 n13 n14 n15 n16 n17))

@@ -1,0 +1,28 @@
+TA-1 Name:- Rama
+TA-2 Name:- Amit N
+
+Design Grade for q1:- B
+
+Correctness Score for q1:- 06/15 (-9 for 3 manual changes and run)
+
+TA Comments on Design for q1:-
+- World interface return types wrong
+- Widget interface return types wrong
+- Widget data definition typo.
+- World no interpretation
+- local functions should have contracts. Missed for 4 functions in metatoy.
+- Missed throbber constructor fields
+- contract violations for make-throbber, make-clock, make-politician.
+- after-mouse-event in metatoy has wrong contract as Nat Nat. 
+- throbber should not stop on selection.
+- after-button-down in politician : near? is being updated in this along with drag/button-up.
+	Also move changes to data nearer to where they are being modified.
+	
+
+Student1 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+
+Student2 CCIS ID:- rshah7414
+Presentation Grade:- A
+TA Comments on Presentation:-

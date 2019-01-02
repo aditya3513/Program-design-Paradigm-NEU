@@ -1,0 +1,19 @@
+TA-1 Name:- Vinay
+TA-2 Name:- Abhay
+
+Design Grade:- AB
+Correctness Score:- 13/15
+TA Comments on Design:-
+- template missing for Color
+- avoid new lines for closing brackets
+- write contract,purpose,examples and strategy for complex lambda/local functions
+- simplfy functions by using helper functions
+
+Student1 CCIS ID:- aditya413
+Presentation Grade:- A
+TA Comments on Presentation:-
+- be more confident and concise while explaining the code
+
+Student2 CCIS ID:-
+Presentation Grade:-
+TA Comments on Presentation:-

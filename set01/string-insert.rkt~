@@ -1,0 +1,25 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname string-insert) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require rackunit)
+(require "extras.rkt")
+(check-location "01" "string-insert.rkt")
+
+(provide string-insert)
+
+;; distance-to-origin: Real Real -> PosReal
+;; GIVEN: A set of Co ordinates of a 2D plane.
+;; RETURNS: Distance of the co ordinate from the origin i.e (0,0)
+;; EXAMPLES :
+;; (distance-to-origin 3 4) = 5
+;; (distance-to-origin -5 0) = 5
+;; DESIGN STRATEGY: Combine simpler functions
+
+(define (distance-to-origin x y)
+  (expt (+ (* x x) (* y y)) 0.5)
+  )
+;; TESTS
+(begin-for-test
+  (check-equal? (distance-to-origin 3 4) 5 "Distance should be 5")
+  (check-equal? (distance-to-origin -5 0) 5 "Distance should be 5")
+)  

@@ -1,0 +1,27 @@
+TA-1 Name:- Jai Asher
+TA-2 Name:- Ramasubramanian Chandrasekar
+
+Student CCIS ID: aditya413
+
+Correctness Score:- 9 
+
+Design Grade:- C
+TA Comments on Design:-
+-------- FSM -------------
+- No Error state
+- A lot of test coverage missing 
+- State is a struct or itemized data?
+- State template missing/incorrect
+- Machine Input template incorrect
+- next-state needs helpers, strategy and implementation incorrect
+- error-state? - always returns false 
+--------- Probe -----------
+- Template for probe is incorrect (probe-direction p)
+- Direction data type is missing
+- probe-forward-possible-outcome? - Strategy incorrect, helper function missing and 
+- long lines (190 characters)
+- Cotracts, purpose statement and strategy missing for a lot of functions.
+
+Presentation Grade:- A
+TA Comments on Presentation:-
+- Not uploaded the Diagram

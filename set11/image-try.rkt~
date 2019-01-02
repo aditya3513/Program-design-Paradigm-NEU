@@ -1,0 +1,58 @@
+#lang racket
+(require 2htdp/image)
+(require 2htdp/universe)
+(require "PerfectBounce.rkt")
+
+(define RED-CIRCLE (circle 10 "solid" "red"))
+(define black-dot (circle 2 "solid" "black"))
+(define BALL (overlay/align "middle" "middle" black-dot RED-CIRCLE))
+
+(define width 150)
+(define height 50)
+
+(define W 500)
+(define H 600)
+
+(define EMPTY-CANVAS (empty-scene W H))
+
+(define width-y 50)
+(define height-y 150)
+(define handle (rectangle 10 10 "outline" "black"))
+
+
+(define CS (rectangle width height "outline" "black"))
+(define CS-Y (rectangle width-y height-y "outline" "black"))
+
+(define CB-X (rectangle (+ 30 width) height "outline" "black"))
+(define CB-Y (rectangle width-y (+ 30 height-y) "outline" "black"))
+(define CB-XY (rectangle (+ 30 width) (+ 30 height) "outline" "black"))
+
+(define BOX-X (overlay CS CB-X))
+(define BOX-Y (overlay CS-Y CB-Y))
+(define BOX-XY (overlay CS CB-XY))
+
+(define X-BOX-HANDLE (overlay/align "left" "top" handle BOX-X))
+(define Y-BOX-HANDLE (overlay/align "left" "top" handle BOX-Y))
+(define XY-BOX-HANDLE (overlay/align "left" "top" handle BOX-XY))
+
+X-BOX-HANDLE
+Y-BOX-HANDLE
+XY-BOX-HANDLE
+
+(define particle-x 50)
+(define particle-y 50)
+
+(define particle-vx 0)
+(define partcile-vy 0)
+
+
+(define p (make-particle particle-x particle-y 0 0))
+
+(define (rect x y w h)
+  (make-rect (- x (/ w 2)) (+ x (/ w 2)) (- y (/ h 2)) (+ y (/ h 2))))
+
+(rect particle-x particle-y width height)
+
+;;(particle-after-tick p rect)
+
+(place-image X-BOX-HANDLE 50 100 EMPTY-CANVAS)

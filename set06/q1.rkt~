@@ -1,0 +1,162 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname q1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require rackunit)
+(require "extras.rkt")
+(check-location "06" "q1.rkt")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; CONSTANTS:
+(define CIRCLE (circle 20 "outline" "green"))
+(define CIRCLE-SELECTED (circle 20 "solid" "green"))
+(define SQUARE (square 20 "outline" "green"))
+(define SQUARE-SELECTED (square 20 "solid" "green"))
+
+
+;; Dimensions of the canvas
+(define CANVAS-WIDTH 500)
+(define CANVAS-HEIGHT 400)
+(define EMPTY-CANVAS (empty-scene CANVAS-WIDTH CANVAS-HEIGHT))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; DATA DEFINITIONS:
+(define-struct node(x y shape children selected? mx my))
+;;
+
+;; ListOfNode is one of
+;; -- empty
+;; -- (cons Node ListOfNode)
+
+;; ListOfNumber is one of
+;; -- empty
+;; -- (cons Number ListOfNumber)
+
+;; Tree 
+
+;; A ListOfTree(LOT) is either
+;; -- empty
+;; -- (cons Tree ListOfTree)
+
+
+(define-struct world(lot mx my))
+;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; initial-world : Any -> World
+;; GIVEN: any value
+;; RETURNS: an initial world.  The given value is ignored.
+
+;; run :  Any -> World
+;; GIVEN: any value
+;; EFFECT: runs a copy of an initial world
+;; RETURNS: the final state of the world.  The given value is ignored.
+
+;; world-after-mouse-event : World Integer Integer MouseEvent -> World
+;; GIVEN: a World, a location, and a MouseEvent
+;; RETURNS: the state of the world as it should be following the given mouse event ;; at that location.
+(define (world-after-mouse-event world mx my mouse-event)
+  (make-world (lot-after-mouse-event ((world-lot world)
+                                      mx my mouse-event))
+              mx my))
+
+
+(define (lot-after-mouse-event lot mx my mouse-event)
+  (cond
+    [(empty? lot) empty]
+    [else
+     (cons (tree-after-mouse-event (first lot) mx my mouse-event)
+           (lot-after-mouse-event (rest lot) mx my mouse-event))]))
+
+
+(define (tree-after-mouse-event tree mx my mouse-event)
+  (cond
+    [(mouse=? mev "button-down") (tree-after-button-down tree mx my)]
+    [(mouse=? mev "drag") (tree-after-drag tree mx my)]
+    [(mouse=? mev "button-up") (tree-after-button-up tree mx my)]
+    [else tree])))
+
+
+(define (tree-after-button-down tree mx my)
+  (if (in-node? mx my tree)
+      (make-node (node-x tree)
+                 (node-y tree)
+                 (node-shape tree)
+                 (lot-after-mouse-event (node-children tree)
+                                        mx my "button-down")   
+                 #true
+                 mx my)
+      (make-node (node-x tree)
+                 (node-y tree)
+                 (node-shape tree)
+                 (lot-after-mouse-event (node-children tree)
+                                        mx my "button-down")
+                 #false
+                 (node-mx mx) (node-my my))))
+
+(define (tree-after-drag tree mx my)
+  (if (node-selected? tree)
+      
+  
+
+  (define (mouse-move-distance-x node mx my)
+  (- mx (node-mx circ)))
+(define (mouse-move-distance-y node mx my)
+  (- my (node-my circ)))
+  
+;; world-after-key-event : World KeyEvent -> World
+;; GIVEN: a World and a key event
+;; RETURNS: the state of the world as it should be following the given key event
+
+
+;; world-to-trees : World -> ListOfTree
+;; GIVEN: a World
+;; RETURNS: a list of all the trees in the given world.
+
+
+;; tree-to-root : Tree -> Node
+;; GIVEN: a tree
+;; RETURNS: the node at the root of the tree
+;; EXAMPLE: Consider the tree represented as follows:
+#|
+                 A
+                 |
+       +---+-----+-----+
+       |   |     |     |
+       B   C     D     E
+           |           |
+         +---+      +-----+
+         |   |      |     |
+         F   G      H     I
+|#
+;; If tree-to-root is given the subtree rooted at C, it should return the
+;; data structure associated with node C. This data structure may or may
+;; not include data associated with rest of the tree, depending on
+;; whether you have chosen to represent nodes differently from trees.
+
+
+;; tree-to-sons : Tree -> ListOfTree
+;; GIVEN: a tree
+;; RETURNS: the data associated with the immediate subtrees of the given
+;; tree. 
+;; EXAMPLE: In the situation above, if tree-to-sons is given the subtree
+;; rooted at C, it should return a list consisting of the subtree rooted
+;; at F and the subtree rooted at G.
+
+;; node-to-center : Node -> Posn
+;; RETURNS: the center of the given node as it is to be displayed on the
+;; scene.
+;; Note: this function returns a Posn (an ISL builtin).  This is for the
+;; convenience of the testing framework, and you may or may not wish to
+;; represent the center of the node in this way.
+
+;; node-to-selected? : Node -> Boolean
+;; RETURNS: true iff the given node is selected.
+
+
+
+
+(make-node x y true 0 0 (list (make-node (list))
+                              (make-node)))
